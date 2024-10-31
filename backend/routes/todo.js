@@ -11,22 +11,28 @@ export async function createTodo(req, res, next) {
         return res.status(400).json({ error: 'Task is required' });
     }
 
-    const newTodo = { id: currentId++, task }; // Use a counter for IDs
+    const newTodo = { id: currentId++, task, completed: false }; // Use a counter for IDs
     todos.push(newTodo);
+    console.log(JSON.stringify(todos) + '\n');
     res.status(201).json(newTodo);
 }
 
 export async function updateTodo(req, res, next) {
     const { id } = req.params;
-    const { task } = req.body;
+    const { task, completed } = req.body;
 
-    if (!task) {
-        return res.status(400).json({ error: 'Task is required' });
+    if (task === undefined && completed === undefined) {
+        return res.status(400).json({ error: 'Task or completed status is required' });
     }
 
     const todoIndex = todos.findIndex(todo => todo.id == id);
     if (todoIndex !== -1) {
-        todos[todoIndex] = { ...todos[todoIndex], task };
+        if (task !== undefined) {
+            todos[todoIndex].task = task;
+        }
+        if (completed !== undefined) {
+            todos[todoIndex].completed = completed;
+        }
         res.json(todos[todoIndex]);
     } else {
         res.status(404).json({ message: 'Todo not found' });

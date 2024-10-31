@@ -86,6 +86,10 @@ function addTodoToDOM(todo) {
     task.appendChild(todoItem);
 
     task.scrollTo({ top: task.scrollHeight, behavior: 'smooth' });
+
+    if (todo.completed) {
+        todoItem.querySelector('span').classList.add('completed');
+    }
 }
 
 // Add a new todo
